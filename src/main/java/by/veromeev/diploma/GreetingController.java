@@ -1,5 +1,7 @@
-package hello;
+package by.veromeev.diploma;
 
+import by.veromeev.diploma.entity.dto.Greeting;
+import by.veromeev.diploma.entity.dto.HelloMessage;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -11,10 +13,10 @@ public class GreetingController {
 
     @MessageMapping("/hello/{Name}")
     @SendTo("/topic/greetings/{Name}")
-    public Greeting greeting(HelloMessage message, @DestinationVariable("Name") String name) throws Exception {
+    public Greeting greeting(HelloMessage message, @DestinationVariable("Name") String name) {
         System.out.println("got:  "+message.getName() );
 //        Thread.sleep(1000); // simulated delay
-        Greeting g = new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+        Greeting g = new Greeting(name + ": Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
         System.out.println("resp: "+g.getContent());
         return g;
     }

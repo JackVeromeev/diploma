@@ -1,10 +1,11 @@
-package hello;
+package by.veromeev.diploma.entity.dto;
 
 public class Greeting {
 
     private String content;
 
     public Greeting() {
+        System.out.println("Greeting created");
     }
 
     public Greeting(String content) {

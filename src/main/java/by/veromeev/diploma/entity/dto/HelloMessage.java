@@ -1,4 +1,4 @@
-package hello;
+package by.veromeev.diploma.entity.dto;
 
 public class HelloMessage {
 
