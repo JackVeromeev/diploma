@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="pagehead">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">SLAAR</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/admin/windows}">Windows</a></li>
+                <!--<li><a th:href="">Knowledge base</a></li>-->
+                <!--<li><a th:href="">Attachments</a></li>-->
+                <li><a th:href="@{/admin/credentials}">Credentials</a></li>
+                <!--<li><a th:href="">Logout</a></li>-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text" th:text="${#httpServletRequest.remoteUser}">Some text</p>
+                </li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="btn btn-danger navbar-btn" type="submit" value="Sign Out"/>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

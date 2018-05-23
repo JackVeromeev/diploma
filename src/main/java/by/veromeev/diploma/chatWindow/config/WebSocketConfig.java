@@ -1,4 +1,4 @@
-package by.veromeev.diploma;
+package by.veromeev.diploma.chatWindow.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -14,3 +14,15 @@ spring:
           use_jdbc_metadata_defaults: false
     hibernate:
       ddl-auto: update
+  data:
+    rest:
+      base-path: /res
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
+
+  thymeleaf:
+    cache: false

@@ -2,6 +2,7 @@ package by.veromeev.diploma.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.MappedSuperclass;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 abstract class AbstractChatSession extends AbstractEntity {
 
     private static final long serialVersionUID = 5156193216546006995L;

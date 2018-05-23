@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headerinc :: head">
+    <meta charset="UTF-8">
+    <title>Edit Window</title>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Change chat window</h1>
+    <div class="form-signin">
+        <input type="hidden" id="winid" th:value="${window.getId()}">
+        <div class="form-group">
+            <label class="control-label" for="name">Name</label>
+            <input type="text" class="form-control" id="name"
+                   name="name" th:value="${window.getName()}" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="orgid">Organization Id</label>
+            <input type="text" class="form-control" id="orgid"
+                   name="SFOrganizationId" th:value="${window.getSFOrganizationId()}" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="butid">Buttons Id</label>
+            <input type="text" class="form-control" id="butid"
+                   name="SFButtonsId" th:value="${window.getSFButtonsId()}" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="depid">Deployment Id</label>
+            <input type="text" class="form-control" id="depid"
+                   name="SFDeploymentId" th:value="${window.getSFDeploymentId()}" required>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Create"
+                    onclick="updateWindow()">
+                Create new window
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    function updateWindow() {
+        var mydata = {
+            id: $("#winid").val(),
+            name: $("#name").val(),
+            sforganizationId: $("#orgid").val(),
+            sfbuttonsId: $("#butid").val(),
+            sfdeploymentId: $("#depid").val()
+        };
+        console.log(mydata);
+        $.ajax({
+            url: "/admin/windows/" + $("#winid").val() + "/",
+            type: 'PUT',
+            data: JSON.stringify(mydata),
+            success: function (result) {
+                window.location.replace("/admin/windows");
+            }
+        });
+    }
+</script>
+</body>
+</html>

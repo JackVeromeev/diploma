@@ -2,28 +2,28 @@ package by.veromeev.diploma.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class OperatorChatMessage extends AbstractEntity {
 
     private static final long serialVersionUID = -3541746821607567750L;
 
-    private LocalDateTime getDateTime;
+    private LocalDateTime createdDateTime;
 
     private String sender;
 
     private String message;
 
-    @OneToMany
-    private Set<Attachment> attachments;
-
+    @ManyToOne
+    private OperatorChatSessionBlock sessionBlock;
 }

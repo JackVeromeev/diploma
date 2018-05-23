@@ -6,18 +6,18 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OperatorChatSessionBlock extends AbstractChatSession {
+public class AdminDetails extends AbstractEntity {
 
-    private static final long serialVersionUID = -7298601986955734964L;
+    private static final long serialVersionUID = 2190921285470659616L;
 
-    @ManyToOne
-    private ChatSession chatSession;
+    private String username;
+
+    private String password;
 
 }

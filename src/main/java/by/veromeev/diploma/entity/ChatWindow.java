@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -18,8 +17,8 @@ public class ChatWindow extends AbstractEntity {
 
     private static final long serialVersionUID = 14485663450357523L;
 
-    @OneToMany()
-    private Set<ChatSession> chatSessions;
+    @NotBlank
+    private String name;
 
     @NotBlank
     @Length(min = 15, max = 18)
@@ -33,4 +32,14 @@ public class ChatWindow extends AbstractEntity {
     @Length(min = 15, max = 18)
     private String SFDeploymentId;
 
+
+    @Transient
+    private Long chatSessionsCount;
+
+    @Transient
+    private Long activeChatSessionsCount;
+
+    public Boolean activeChatSessionsExist() {
+        return activeChatSessionsCount > 0;
+    }
 }

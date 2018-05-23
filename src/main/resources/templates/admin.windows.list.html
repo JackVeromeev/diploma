@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headerinc :: head">
+    <title>Chat Windows</title>
+</head>
+<body>
+<script type="text/javascript">
+    function deleteChatWindow(chatWindowId) {
+        $.ajax({
+            url: '/res/chatWindows/' + chatWindowId,
+            type: 'DELETE',
+            success: function (result) {
+                window.location.replace("/admin/windows");
+            }
+        });
+    }
+</script>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <form th:action="@{/admin/windows}" method="post" class="form-signin">
+        <div class="form-group">
+            <label class="control-label" for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="orgid">Organization Id</label>
+
+            <input type="text" class="form-control" id="orgid" name="SFOrganizationId" required>
+
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="butid">Buttons Id</label>
+
+            <input type="text" class="form-control" id="butid" name="SFButtonsId" required>
+
+        </div>
+        <div class="form-group">
+            <label class="control-label " for="depid">Deployment Id</label>
+
+            <input type="text" class="form-control" id="depid" name="SFDeploymentId" required>
+
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Create" type="submit">
+                Create new window
+            </button>
+        </div>
+    </form>
+    <div th:if="${chatWindows.size()}">
+        <h1>Windows list</h1>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Actions</th>
+                <th scope="col">Window Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Organization Id</th>
+                <th scope="col">Buttons Id</th>
+                <th scope="col">Deployment Id</th>
+                <th scope="col">Sessions</th>
+                <th scope="col">Active sessions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="chatWindow : ${chatWindows}" th:scope="row">
+                <td>
+                    <ul class="pagination" th:disabled="${chatWindow.activeChatSessionsExist()}">
+                        <li><a th:href="@{/admin/windows/{id}/(id=${chatWindow.getId()})}">Edit</a></li>
+                        <li>
+                            <a th:onclick="'deleteChatWindow(\'' + ${chatWindow.getId()} + '\');'"
+                               href="#">
+                                Delete
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+                <td th:text="${chatWindow.getId()}"></td>
+                <td th:text="${chatWindow.getName()}"></td>
+                <td th:text="${chatWindow.getSFOrganizationId()}"></td>
+                <td th:text="${chatWindow.getSFButtonsId()}"></td>
+                <td th:text="${chatWindow.getSFDeploymentId()}"></td>
+                <td th:text="${chatWindow.getChatSessionsCount()}"></td>
+                <td th:text="${chatWindow.getActiveChatSessionsCount()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:unless="${chatWindows.size()}">
+        <h3>You have not created any chat window</h3>
+    </div>
+</div>
+</body>
+</html>

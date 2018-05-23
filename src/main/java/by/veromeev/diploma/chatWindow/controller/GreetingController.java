@@ -1,4 +1,4 @@
-package by.veromeev.diploma;
+package by.veromeev.diploma.chatWindow.controller;
 
 import by.veromeev.diploma.entity.dto.Greeting;
 import by.veromeev.diploma.entity.dto.HelloMessage;
