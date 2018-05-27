@@ -1,53 +1,35 @@
 package by.veromeev.diploma.admin.controller;
 
-import by.veromeev.diploma.dao.ChatSessionDAO;
 import by.veromeev.diploma.dao.ChatWindowDAO;
-import by.veromeev.diploma.entity.ChatSession;
 import by.veromeev.diploma.entity.ChatWindow;
+import by.veromeev.diploma.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
 public class AdminWindowsController {
 
+    private static final String EM_WINDOW_NOT_FOUND = "Oops! Looks like window you opened was deleted or id was changed";
+
     private ChatWindowDAO chatWindowDAO;
 
-    private ChatSessionDAO chatSessionDAO;
-
     @Autowired
-    public AdminWindowsController(ChatWindowDAO chatWindowDAO, ChatSessionDAO chatSessionDAO) {
-        this.chatSessionDAO = chatSessionDAO;
+    public AdminWindowsController(ChatWindowDAO chatWindowDAO) {
         this.chatWindowDAO = chatWindowDAO;
     }
 
     @GetMapping("/admin/windows")
     public String windows(Model model) {
 
-        Map<Long, ChatWindow> chatWindowMap = new HashMap<>();
-        for (ChatWindow chatWindow : this.chatWindowDAO.findAll()) {
-            if (chatWindow.getChatSessionsCount() == null) chatWindow.setChatSessionsCount(0L);
-            if (chatWindow.getActiveChatSessionsCount() == null) chatWindow.setActiveChatSessionsCount(0L);
-            chatWindowMap.put(chatWindow.getId(), chatWindow);
-        }
-        Iterable<ChatSession> all = chatSessionDAO.findAll();
-        if (all != null) {
-            for (ChatSession chatSession : chatSessionDAO.findAll()) {
-                ChatWindow chatWindow = chatWindowMap.get(chatSession.getChatWindow().getId());
-                chatWindow.setChatSessionsCount(chatWindow.getChatSessionsCount() + 1);
-                if (chatSession.getIsActive()) {
-                    chatWindow.setActiveChatSessionsCount(chatWindow.getActiveChatSessionsCount() + 1);
-                }
-            }
-        }
-        model.addAttribute("chatWindows", chatWindowMap.values());
-
+        ArrayList<ChatWindow> chatWindows = new ArrayList<>();
+        this.chatWindowDAO.findAll().forEach(chatWindows::add);
+        model.addAttribute("chatWindows", chatWindows);
         return "admin.windows.list";
     }
 
@@ -59,10 +41,20 @@ public class AdminWindowsController {
 
     @GetMapping("/admin/windows/{id}/")
     public String editWindow(@PathVariable("id") Long windowId, Model model) {
-        Optional<ChatWindow> window = this.chatWindowDAO.findById(windowId);
-        System.out.println("window edit,  found=" + window.isPresent());
-        window.ifPresent(chatWindow -> model.addAttribute("window", chatWindow));
-        return "admin.windows.edit";
+        Optional<ChatWindow> optionalChatWindow = this.chatWindowDAO.findById(windowId);
+        System.out.println("window edit, found=" + optionalChatWindow.isPresent());
+        optionalChatWindow.ifPresent(chatWindow ->
+                model.addAttribute("window", chatWindow)
+        );
+        optionalChatWindow.orElseGet(() -> {
+            model.addAttribute("errorMessage", EM_WINDOW_NOT_FOUND);
+            return null;
+        });
+        String viewName = "admin.windows.edit";
+        if (!optionalChatWindow.isPresent()) {
+            viewName = windows(model);
+        }
+        return viewName;
     }
 
     @PutMapping(value = "/admin/windows/{id}/", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -72,24 +64,39 @@ public class AdminWindowsController {
         Optional<ChatWindow> optionalChatWindow = this.chatWindowDAO.findById(windowId);
         System.out.println("window edit, found=" + optionalChatWindow.isPresent());
         optionalChatWindow.ifPresent(dbChatWindow -> {
-            if (updatedChatWindow.getName() != null && !"".equals(updatedChatWindow.getName())) {
+            boolean recordChanged = false;
+            if (StringUtils.changedToNotEmpty(dbChatWindow.getName(), updatedChatWindow.getName())) {
                 dbChatWindow.setName(updatedChatWindow.getName());
+                recordChanged = true;
             }
 
-            if (updatedChatWindow.getSFButtonsId() != null && !"".equals(updatedChatWindow.getSFButtonsId())) {
+            if (StringUtils.changedToNotEmpty(dbChatWindow.getSFButtonsId(), updatedChatWindow.getSFButtonsId())) {
                 dbChatWindow.setSFButtonsId(updatedChatWindow.getSFButtonsId());
+                recordChanged = true;
             }
 
-            if (updatedChatWindow.getSFDeploymentId() != null && !"".equals(updatedChatWindow.getSFDeploymentId())) {
+            if (StringUtils.changedToNotEmpty(dbChatWindow.getSFDeploymentId(), updatedChatWindow.getSFDeploymentId())) {
                 dbChatWindow.setSFDeploymentId(updatedChatWindow.getSFDeploymentId());
+                recordChanged = true;
             }
 
-            if (updatedChatWindow.getSFOrganizationId() != null && !"".equals(updatedChatWindow.getSFOrganizationId())) {
+            if (StringUtils.changedToNotEmpty(dbChatWindow.getSFOrganizationId(), updatedChatWindow.getSFOrganizationId())) {
                 dbChatWindow.setSFOrganizationId(updatedChatWindow.getSFOrganizationId());
+                recordChanged = true;
             }
-            this.chatWindowDAO.save(dbChatWindow);
+            if (recordChanged) {
+                this.chatWindowDAO.save(dbChatWindow);
+            }
             model.addAttribute("window", dbChatWindow);
         });
-        return "admin.windows.edit";
+        optionalChatWindow.orElseGet(() -> {
+            model.addAttribute("errorMessage", EM_WINDOW_NOT_FOUND);
+            return null;
+        });
+        String viewName = "admin.windows.edit";
+        if (!optionalChatWindow.isPresent()) {
+            viewName = windows(model);
+        }
+        return viewName;
     }
 }

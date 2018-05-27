@@ -15,7 +15,7 @@
         Invalid username and password.
     </div>
     <div class="alert alert-warning" th:if="${#httpServletRequest.remoteUser != null}">
-        [[${#httpServletRequest.remoteUser}]]
+        You have already logged in as a [[${#httpServletRequest.remoteUser}]]
     </div>
     <div class="alert alert-success" th:if="${param.logout}">
         You have been logged out.

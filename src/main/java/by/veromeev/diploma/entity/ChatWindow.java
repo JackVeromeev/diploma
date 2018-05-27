@@ -2,17 +2,22 @@ package by.veromeev.diploma.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ChatWindow extends AbstractEntity {
 
     private static final long serialVersionUID = 14485663450357523L;
@@ -32,14 +37,20 @@ public class ChatWindow extends AbstractEntity {
     @Length(min = 15, max = 18)
     private String SFDeploymentId;
 
+    @OneToMany(mappedBy = "chatWindow", fetch = FetchType.EAGER)
+    private Set<ChatSession> chatSessions = new HashSet<>();
 
-    @Transient
-    private Long chatSessionsCount;
+    public Long getChatSessionsCount() {
+        return (long) chatSessions.size();
+    }
 
-    @Transient
-    private Long activeChatSessionsCount;
+    public Long getActiveChatSessionsCount() {
+        return chatSessions.stream()
+                .filter(ChatSession::isActive)
+                .count();
+    }
 
     public Boolean activeChatSessionsExist() {
-        return activeChatSessionsCount > 0;
+        return getActiveChatSessionsCount() > 0;
     }
 }

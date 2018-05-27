@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OperatorChatMessage extends AbstractEntity {
+public class OperatorChatMessage extends AbstractEntity implements Comparable<OperatorChatMessage> {
 
     private static final long serialVersionUID = -3541746821607567750L;
 
@@ -26,4 +26,9 @@ public class OperatorChatMessage extends AbstractEntity {
 
     @ManyToOne
     private OperatorChatSessionBlock sessionBlock;
+
+    @Override
+    public int compareTo(OperatorChatMessage o) {
+        return this.getCreatedDateTime().compareTo(o.getCreatedDateTime());
+    }
 }
