@@ -1,5 +1,6 @@
 package by.veromeev.diploma.admin.controller;
 
+import by.veromeev.diploma.core.ApplicationStatusController;
 import by.veromeev.diploma.dao.ChatWindowDAO;
 import by.veromeev.diploma.entity.ChatWindow;
 import by.veromeev.diploma.util.StringUtils;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
-public class AdminWindowsController {
+public class AdminWindowsController extends ApplicationStatusController {
 
     private static final String EM_WINDOW_NOT_FOUND = "Oops! Looks like window you opened was deleted or id was changed";
 
@@ -46,10 +47,9 @@ public class AdminWindowsController {
         optionalChatWindow.ifPresent(chatWindow ->
                 model.addAttribute("window", chatWindow)
         );
-        optionalChatWindow.orElseGet(() -> {
+        if (!optionalChatWindow.isPresent()) {
             model.addAttribute("errorMessage", EM_WINDOW_NOT_FOUND);
-            return null;
-        });
+        }
         String viewName = "admin.windows.edit";
         if (!optionalChatWindow.isPresent()) {
             viewName = windows(model);

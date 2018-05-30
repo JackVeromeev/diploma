@@ -1,9 +1,6 @@
 package by.veromeev.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -12,7 +9,8 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"chatSession"})
+@ToString(exclude = {"chatSession"})
 public class OperatorChatSessionBlock extends AbstractChatSession {
 
     private static final long serialVersionUID = -7298601986955734964L;

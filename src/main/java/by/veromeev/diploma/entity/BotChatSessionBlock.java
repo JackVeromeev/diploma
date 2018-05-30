@@ -1,7 +1,6 @@
 package by.veromeev.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -12,6 +11,11 @@ import java.util.TreeSet;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@ToString(
+        exclude = {"chatSession", "currentKnowledgeNode", "botChatMessagePairs"})
+@EqualsAndHashCode(callSuper = true,
+        exclude = {"chatSession", "currentKnowledgeNode", "botChatMessagePairs"})
 public class BotChatSessionBlock extends AbstractChatSession {
 
     private static final long serialVersionUID = -4350398335647442215L;

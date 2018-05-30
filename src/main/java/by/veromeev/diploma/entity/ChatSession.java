@@ -1,9 +1,6 @@
 package by.veromeev.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -17,7 +14,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"chatWindow", "offlineRequest",
+        "botChatSessionBlocks", "operatorChatSessionBlocks"})
+@ToString(exclude = {"chatWindow", "offlineRequest",
+        "botChatSessionBlocks", "operatorChatSessionBlocks"})
 public class ChatSession extends AbstractChatSession {
 
     private static final long serialVersionUID = 8914336319596204870L;
@@ -58,6 +58,6 @@ public class ChatSession extends AbstractChatSession {
     }
 
     public Boolean isActive() {
-        return sessionState == SessionState.CHAT_SYSTEM || sessionState == SessionState.CHAT_OPERATOR;
+        return sessionState.isActive();
     }
 }

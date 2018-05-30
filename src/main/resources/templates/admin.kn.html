@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headerinc :: head">
+    <meta charset="UTF-8"/>
+    <title>Change credentials</title>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+
+    <div th:unless="${node!=null}">
+        <h3>Root node</h3>
+    </div>
+
+    <div th:if="${node!=null}" id="#node-info">
+        <div th:if="${parents}">
+            <a th:href="@{/admin/kb/}">
+                Root
+            </a> &gt;
+            <span th:if="${parents.size()!=0}">
+                <span th:each="parentn : ${parents}">
+                    <a th:href="@{/admin/kb/{id}/(id=${parentn.getId()})}">
+                        <span th:text="${parentn.getName()}"></span>
+                    </a>
+                    &gt;
+                </span>
+            </span>
+        </div>
+        <h3 th:text="'Node #' + ${node.getId()} + ' &#171;' + ${node.getName()} + '&#187;'"
+            style="display: inline-block; margin-right: 10px"></h3>
+
+        <a class="btn btn-primary" th:href="@{/admin/kb/edit/{id}/(id=${node.getId()})}">Edit</a>
+
+        <hr>
+        <h4>Node summary</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Active</th>
+                <th>Special</th>
+                <th>New Question</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${node.getQuestion()}"></td>
+                <td th:text="${node.getAnswer()}"></td>
+                <td th:classappend="${node.getIsActive()} ? alert-success : alert-danger"
+                    th:text="${node.getIsActive()}"></td>
+                <td th:classappend="${node.getIsSpecial()} ? alert-success : alert-danger"
+                    th:text="${node.getIsSpecial()}"></td>
+                <td th:text="${node.getNewQuestion()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h4>Child Nodes</h4>
+
+    <p class="alert-warning" th:unless="${children!=null && children.size()!=0}">
+        There is no children yet
+    </p>
+
+    <div th:if="${children!=null && children.size()!=0}" id="children">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Active</th>
+                <th>Special</th>
+                <th>New Question</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="child : ${children}">
+                <td th:text="${child.getId()}"></td>
+                <td>
+                    <a th:href="@{/admin/kb/{id}/(id=${child.getId()})}" th:text="${child.getName()}"></a>
+                </td>
+                <td th:text="${child.getQuestion()}"></td>
+                <td th:text="${child.getAnswer()}"></td>
+                <td th:classappend="${child.getIsActive()} ? alert-success : alert-danger"
+                    th:text="${child.getIsActive()}"></td>
+                <td th:classappend="${child.getIsSpecial()} ? alert-success : alert-danger"
+                    th:text="${child.getIsSpecial()}"></td>
+                <td th:text="${child.getNewQuestion()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h4>Add new child</h4>
+
+    <form th:action="@{/admin/kb/{id}(id=${node!=null?node.getId():''})}" method="post">
+        <div class="form-group">
+            <label for="f-name">Name</label>
+            <input type="text" class="form-control" id="f-name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="f-question">Question</label>
+            <input type="text" class="form-control" id="f-question" name="question">
+        </div>
+        <div class="form-group">
+            <label for="f-answer">Answer</label>
+            <input type="text" class="form-control" id="f-answer" name="answer">
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="isSpecial" name="isSpecial">
+            <label class="form-check-label" for="isSpecial">Special question</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Create new child</button>
+    </form>
+
+    <hr>
+
+
+    <div th:if="${appStatus.getStatus().toString() == 'DOWN' && node!=null}">
+        <h3 class="alert-danger"> Delete Node</h3>
+        <div class="radio">
+            <label><input type="radio" name="optradio" value="all">Delete all subnodes</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="optradio" value="nodeonly">Attach subnodes to parent node</label>
+        </div>
+        <button class="btn btn-danger" id="delete-btn">Delete node</button>
+        <input style="display: none" id="parent-node-id"
+               th:value="${node.getParentNode()!=null ? node.getParentNode().getId() : ''}"/>
+        <input style="display: none" id="node-id"
+               th:value="${node.getId()}"/>
+        <script>
+            $(document).ready(function () {
+                $("#delete-btn").click(function () {
+                    $.ajax({
+                        url: "/admin/kb/" +
+                        $('#node-id').val() + "/" +
+                        $('input[name=optradio]:checked').val(),
+                        type: 'DELETE',
+                        success: function (result) {
+
+                            window.location.href = "/admin/kb/" + $('#parent-node-id').val();
+                        }
+                    });
+                });
+            });
+
+        </script>
+
+    </div>
+
+</div>
+
+</body>
+</html>

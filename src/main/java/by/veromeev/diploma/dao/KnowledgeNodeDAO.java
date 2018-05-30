@@ -11,4 +11,8 @@ public interface KnowledgeNodeDAO extends CrudRepository<KnowledgeNode, Long> {
 
     List<KnowledgeNode> findKnowledgeNodesByParentNodeId(Long parentNodeId);
 
+    default List<KnowledgeNode> findRootNodes() {
+        return findKnowledgeNodesByParentNodeId(null);
+    }
+
 }

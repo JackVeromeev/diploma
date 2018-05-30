@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"chatSessions"})
 public class ChatWindow extends AbstractEntity {
 
     private static final long serialVersionUID = 14485663450357523L;

@@ -1,9 +1,6 @@
 package by.veromeev.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -14,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"chatSession"})
+@ToString(exclude = {"chatSession"})
 public class OfflineRequest extends AbstractEntity {
 
     private static final long serialVersionUID = 5725789580921672264L;

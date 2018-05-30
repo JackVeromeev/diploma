@@ -1,5 +1,6 @@
 package by.veromeev.diploma.admin.controller;
 
+import by.veromeev.diploma.core.ApplicationStatusController;
 import by.veromeev.diploma.dao.AdminDAO;
 import by.veromeev.diploma.entity.AdminDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class AdminCredentialsController {
+public class AdminCredentialsController extends ApplicationStatusController {
 
     private AdminDAO adminDAO;
 

@@ -1,9 +1,6 @@
 package by.veromeev.diploma.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -20,7 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"sessionBlock", "attachments"})
+@EqualsAndHashCode(callSuper = true, exclude = {"sessionBlock", "attachments"})
 public class BotChatMessagePair extends AbstractEntity implements Comparable<BotChatMessagePair> {
 
     private static final long serialVersionUID = -7305377548747160631L;
