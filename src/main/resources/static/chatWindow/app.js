@@ -1,5 +1,7 @@
 var stompClient = null;
 var myName = '';
+var windowId = 0;
+var connectionId = 0;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -19,10 +21,21 @@ function connect() {
     myName = $("#my-name").val();
     console.log(myName);
     stompClient = Stomp.over(socket);
+    $.ajax({
+        url: "/chat/connection?window=" + windowId,
+        method: "GET",
+        done: function (results) {
+            connectionId = JSON.parse(results).id;
+
+        },
+        fail: function (jqXHR, textStatus, errorThrown) {
+            console.log('Could not get posts, server response: ' + textStatus + ': ' + errorThrown);
+        }
+    });
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings/' + myName, function (greeting) {
+        stompClient.subscribe('/ws/' + myName, function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
         });
     });

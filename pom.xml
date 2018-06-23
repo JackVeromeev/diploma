@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>by.veromeev</groupId>
-    <artifactId>diploma</artifactId>
-    <version>0.1.0</version>
+    <artifactId>slaar</artifactId>
+    <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,6 +15,7 @@
 
     <dependencies>
 
+        <!-- spring-security-web -->
         <!-- spring starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,6 +64,12 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
         </dependency>
 
 

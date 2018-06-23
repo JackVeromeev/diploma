@@ -2,50 +2,50 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="pagehead">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <meta charset="UTF-8"/>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <meta charset="UTF-8"/>
 </head>
 <body>
 <div th:fragment="navbar">
-    <div class="alert alert-danger" th:if="${errorMessage}">
-        <p th:text="${errorMessage}"></p>
+  <div class="alert alert-danger" th:if="${errorMessage}">
+    <p th:text="${errorMessage}"></p>
+  </div>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">SLAAR</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a th:href="@{/admin/windows}">Windows</a></li>
+        <li><a th:href="@{/admin/kb/}">Knowledge base</a></li>
+        <!--<li><a th:href="">Attachments</a></li>-->
+        <li><a th:href="@{/admin/credentials}">Credentials</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <p class="navbar-text alert-success" th:if="${appStatus.getStatus().toString() == 'UP'}">
+            System is UP</p>
+          <p class="navbar-text alert-warning"
+             th:if="${appStatus.getStatus().toString() == 'GETTING_DOWN'}">System is getting to
+            DOWN</p>
+          <p class="navbar-text alert-info"
+             th:if="${appStatus.getStatus().toString() == 'DOWN_PROCESSING'}">System is Processing</p>
+          <p class="navbar-text alert-danger" th:if="${appStatus.getStatus().toString() == 'DOWN'}">
+            System is DOWN</p>
+        </li>
+        <li>
+          <p class="navbar-text" th:text="${ 'You logged in as a ' + #httpServletRequest.remoteUser}"></p>
+        </li>
+        <li>
+          <form th:action="@{/logout}" method="post">
+            <input class="btn btn-danger navbar-btn" type="submit" value="Sign Out"/>
+          </form>
+        </li>
+      </ul>
     </div>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">SLAAR</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li><a th:href="@{/admin/windows}">Windows</a></li>
-                <li><a th:href="@{/admin/kb/}">Knowledge base</a></li>
-                <!--<li><a th:href="">Attachments</a></li>-->
-                <li><a th:href="@{/admin/credentials}">Credentials</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <p class="navbar-text alert-success" th:if="${appStatus.getStatus().toString() == 'UP'}">
-                        System is UP</p>
-                    <p class="navbar-text alert-warning"
-                       th:if="${appStatus.getStatus().toString() == 'GETTING_DOWN'}">System is getting to
-                        DOWN</p>
-                    <p class="navbar-text alert-info"
-                       th:if="${appStatus.getStatus().toString() == 'DOWN_PROCESSING'}">System is Processing</p>
-                    <p class="navbar-text alert-danger" th:if="${appStatus.getStatus().toString() == 'DOWN'}">
-                        System is DOWN</p>
-                </li>
-                <li>
-                    <p class="navbar-text" th:text="${ 'You logged in as a ' + #httpServletRequest.remoteUser}"></p>
-                </li>
-                <li>
-                    <form th:action="@{/logout}" method="post">
-                        <input class="btn btn-danger navbar-btn" type="submit" value="Sign Out"/>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </nav>
+  </nav>
 </div>
 </body>
 </html>
